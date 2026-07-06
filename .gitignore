@@ -1,0 +1,19 @@
+# Private voice library + forged artifacts + rendered audio (never commit these)
+data/
+*.voice
+*.wav
+*.mp3
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+
+# Env / secrets
+.env

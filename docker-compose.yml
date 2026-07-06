@@ -1,0 +1,19 @@
+# VoiceForge production voice backend (Tier B).
+#   docker compose up
+services:
+  voice-backend:
+    build: .
+    ports:
+      - "8090:8090"
+    environment:
+      # Set a bearer token to require auth on mutating/synth routes (recommended).
+      AUTH_TOKEN: "${AUTH_TOKEN:-}"
+      VOICEFORGE_CORS_ORIGINS: "${VOICEFORGE_CORS_ORIGINS:-http://127.0.0.1}"
+    volumes:
+      # The private voice library (forged .voice artifacts) persists here.
+      - ./data/voices:/app/data/voices
+      # HuggingFace weight cache — survives restarts so weights download once.
+      - hf-cache:/home/app/.cache/huggingface
+
+volumes:
+  hf-cache:

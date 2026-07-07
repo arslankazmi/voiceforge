@@ -8,8 +8,7 @@ driven through :func:`voiceforge._model_manager.heavy_session`, never directly.
 from __future__ import annotations
 
 import logging
-
-from ._chatter_common import pick_device
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -21,11 +20,32 @@ ENGINES = ("chatterbox", "chatterbox-turbo")
 _model_overrides: dict = {}
 
 
+def _resolve_device() -> str:
+    """Pick the inference device: ``$VOICEFORGE_DEVICE`` → CUDA → CPU.
+
+    Apple **MPS is intentionally skipped by default**: Chatterbox's conditioning path
+    moves a float64 tensor to the device, and MPS rejects float64
+    (``Cannot convert a MPS Tensor to float64``). CPU is correct and safe on Mac; set
+    ``VOICEFORGE_DEVICE=mps`` to opt in if your setup handles it, or ``=cuda``/``=cpu``.
+    """
+    override = os.environ.get("VOICEFORGE_DEVICE")
+    if override:
+        return override
+    try:
+        import torch  # noqa: PLC0415
+
+        if torch.cuda.is_available():
+            return "cuda"
+    except Exception:
+        pass
+    return "cpu"
+
+
 def _build(engine: str):  # noqa: ANN201
     """Construct the model for *engine*, or return None if chatterbox isn't installed."""
     if engine in _model_overrides:
         return _model_overrides[engine]
-    device = pick_device()
+    device = _resolve_device()
     try:
         if engine == "chatterbox-turbo":
             from chatterbox.tts_turbo import ChatterboxTurboTTS  # noqa: PLC0415

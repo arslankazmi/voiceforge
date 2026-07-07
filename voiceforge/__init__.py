@@ -14,7 +14,10 @@ _os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 _os.environ.setdefault("HF_HUB_DISABLE_IMPLICIT_TOKEN", "1")
 _os.environ.setdefault("DISABLE_TELEMETRY", "1")
 # Cap the MPS allocator + allow CPU fallback (OOM safety on 16 GB unified memory).
+# PyTorch requires LOW <= HIGH; the low watermark defaults to 1.4, so capping HIGH to
+# 0.8 without also lowering LOW raises "invalid low watermark ratio 1.4". Set both.
 _os.environ.setdefault("PYTORCH_MPS_HIGH_WATERMARK_RATIO", "0.8")
+_os.environ.setdefault("PYTORCH_MPS_LOW_WATERMARK_RATIO", "0.5")
 _os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
 
 __version__ = "0.1.0"

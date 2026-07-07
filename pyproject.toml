@@ -29,9 +29,9 @@ dev = ["pytest>=8", "httpx>=0.27", "mypy>=1.10", "ruff>=0.4"]
 
 [tool.uv]
 default-groups = ["dev"]
-# chatterbox-tts (>=0.1.7) declares numpy<2; force numpy 2.x (runs fine in practice).
-# Cap below 2.5 because numba (via librosa) requires NumPy <= 2.4.
-override-dependencies = ["numpy>=2.0.2,<2.5"]
+# No numpy override: chatterbox-tts declares numpy<2 and is written for it. Forcing
+# numpy 2.x triggers NEP-50 float32→float64 upcasts in Chatterbox's audio path
+# (norm_loudness) that break the s3 tokenizer's mel matmul ("float != double").
 
 [build-system]
 requires = ["hatchling"]

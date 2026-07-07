@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# VoiceForge drag-and-drop launcher (Linux).
+# Invoked by voiceforge-forge.desktop when you drop audio file(s) onto it, or run
+# directly with file paths. Requires `voiceforge` on PATH (pipx/uv tool install
+# 'voiceforge[clone]') or set VOICEFORGE_BIN to the executable's full path.
+set -uo pipefail
+
+VF="${VOICEFORGE_BIN:-voiceforge}"
+
+if [ "$#" -eq 0 ]; then
+	echo "Drag an audio clip (WAV/MP3, longer than 5s for Turbo) onto this launcher"
+	echo "to create a .voice clone next to it."
+	read -rp "Press Enter to close… " _ || true
+	exit 1
+fi
+
+status=0
+for f in "$@"; do
+	out="${f%.*}.voice"
+	echo "Forging voice from $(basename "$f") …"
+	if "$VF" forge "$f" -o "$out"; then
+		echo "  -> $out"
+	else
+		echo "  !! Forge failed for $(basename "$f")"
+		status=1
+	fi
+done
+
+echo
+read -rp "Done. Press Enter to close… " _ || true
+exit "$status"

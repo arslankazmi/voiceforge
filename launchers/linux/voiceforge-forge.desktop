@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=VoiceForge — Forge Voice
+Comment=Drop an audio clip to create a .voice clone next to it
+# Point Exec at the voiceforge-forge wrapper (this dir). Use an ABSOLUTE path, e.g.
+#   Exec=/home/you/voiceforge/launchers/linux/voiceforge-forge %F
+# or put voiceforge-forge on your PATH and keep it as below. %F passes dropped files.
+Exec=voiceforge-forge %F
+Terminal=true
+Icon=audio-x-generic
+Categories=AudioVideo;Utility;
+MimeType=audio/wav;audio/mpeg;audio/x-m4a;audio/ogg;audio/flac;

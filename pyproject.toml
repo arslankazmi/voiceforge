@@ -30,7 +30,8 @@ dev = ["pytest>=8", "httpx>=0.27", "mypy>=1.10", "ruff>=0.4"]
 [tool.uv]
 default-groups = ["dev"]
 # chatterbox-tts (>=0.1.7) declares numpy<2; force numpy 2.x (runs fine in practice).
-override-dependencies = ["numpy>=2.0.2"]
+# Cap below 2.5 because numba (via librosa) requires NumPy <= 2.4.
+override-dependencies = ["numpy>=2.0.2,<2.5"]
 
 [build-system]
 requires = ["hatchling"]

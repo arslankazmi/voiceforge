@@ -171,7 +171,10 @@ def _cmd_backend(args: argparse.Namespace) -> None:
 
     if args.token:
         os.environ["AUTH_TOKEN"] = args.token
-    print(f"Serving voice backend at http://{args.host}:{args.port}  (docs at /docs)")
+    print(
+        f"Serving voice backend at http://{args.host}:{args.port}  "
+        "(recording studio at /, docs at /docs)"
+    )
     uvicorn.run("voiceforge.voice_backend:app", host=args.host, port=args.port, reload=False)
 
 

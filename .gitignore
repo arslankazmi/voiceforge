@@ -20,3 +20,6 @@ build/
 
 # Built macOS droplet (regenerate with launchers/macos/build.sh)
 launchers/macos/VoiceForge.app/
+
+# macOS
+.DS_Store
